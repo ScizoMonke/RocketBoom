@@ -31,9 +31,8 @@ def normalize_video(input_path, output_path):
         # Video filters - do scaling and cropping on GPU
         '-vf', (
             'scale_cuda=1920:1080:'  # Scale to 1080p on GPU
-            'force_original_aspect_ratio=decrease:'
-            'eval=init,'
-            'hwdownload,'  # Download from GPU memory for CPU crop
+            'force_original_aspect_ratio=decrease,'
+            'hwdownload,'  # Download from GPU memory for crop
             'format=nv12,'
             'crop=310:110:790:160'  # Crop: width:height:x:y
         ),
