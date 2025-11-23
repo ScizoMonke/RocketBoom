@@ -5,8 +5,8 @@ from datetime import datetime
 
 
 def get_most_recent_dvr(input_dir):
-    """Get the most recent .DVR file from the directory"""
-    dvr_files = list(Path(input_dir).glob("*.DVR"))
+    """Get the most recent .DVR file from the directory (case-insensitive)"""
+    dvr_files = list(Path(input_dir).glob("*.[dD][vV][rR]"))
     if not dvr_files:
         raise FileNotFoundError("No .DVR files found in the directory")
 
