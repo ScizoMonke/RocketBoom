@@ -21,19 +21,14 @@ def normalize_video(input_path, output_path):
     Uses NVIDIA hardware acceleration for RTX 3070.
     """
 
-    # Build ffmpeg command with hardware acceleration
+    # Build ffmpeg command with NVIDIA hardware encoding
     cmd = [
         'ffmpeg',
-        '-hwaccel', 'cuda',  # Use NVIDIA GPU for decoding
-        '-hwaccel_output_format', 'cuda',
         '-i', str(input_path),
 
-        # Video filters - do scaling and cropping on GPU
+        # Video filters - scale and crop
         '-vf', (
-            'scale_cuda=1920:1080:'  # Scale to 1080p on GPU
-            'force_original_aspect_ratio=decrease,'
-            'hwdownload,'  # Download from GPU memory for crop
-            'format=nv12,'
+            'scale=1920:1080:force_original_aspect_ratio=decrease,'
             'crop=310:110:790:160'  # Crop: width:height:x:y
         ),
 
