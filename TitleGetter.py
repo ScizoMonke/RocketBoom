@@ -5,8 +5,8 @@ from datetime import datetime
 
 
 def get_most_recent_dvr(input_dir):
-    """Get the most recent .DVR file from the directory"""
-    dvr_files = list(Path(input_dir).glob("*.DVR"))
+    """Get the most recent .DVR.mp4 file from the directory"""
+    dvr_files = list(Path(input_dir).glob("*.DVR.mp4"))
     if not dvr_files:
         raise FileNotFoundError("No .DVR files found in the directory")
 
@@ -21,20 +21,14 @@ def normalize_video(input_path, output_path):
     Uses NVIDIA hardware acceleration for RTX 3070.
     """
 
-    # Build ffmpeg command with hardware acceleration
+    # Build ffmpeg command with NVIDIA hardware encoding
     cmd = [
         'ffmpeg',
-        '-hwaccel', 'cuda',  # Use NVIDIA GPU for decoding
-        '-hwaccel_output_format', 'cuda',
         '-i', str(input_path),
 
-        # Video filters - do scaling and cropping on GPU
+        # Video filters - scale and crop
         '-vf', (
-            'scale_cuda=1920:1080:'  # Scale to 1080p on GPU
-            'force_original_aspect_ratio=decrease:'
-            'eval=init,'
-            'hwdownload,'  # Download from GPU memory for CPU crop
-            'format=nv12,'
+            'scale=1920:1080:force_original_aspect_ratio=decrease,'
             'crop=310:110:790:160'  # Crop: width:height:x:y
         ),
 
